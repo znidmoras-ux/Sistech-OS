@@ -80,13 +80,28 @@ class RemoteCommand(BaseModel):
     command: str
 
 
+class CommandStatus(StrEnum):
+    queued = "queued"
+    running = "running"
+    completed = "completed"
+    failed = "failed"
+
+
+class CommandUpdate(BaseModel):
+    status: CommandStatus
+    result_message: str | None = None
+
+
 class CommandResult(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     tenant_id: UUID
     asset_id: UUID
     command: str
-    status: str = "queued"
+    status: CommandStatus = CommandStatus.queued
+    result_message: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
 
 
 class DashboardSummary(BaseModel):
@@ -97,3 +112,50 @@ class DashboardSummary(BaseModel):
     tickets_open: int
     tickets_critical: int
     telemetry_samples: int
+
+
+class Contract(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    customer_name: str
+    contract_type: str = "monthly"
+    monthly_value: float = 0
+    hours_included: float = 0
+    hours_used: float = 0
+    status: str = "active"
+
+
+class Opportunity(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    company: str
+    stage: str = "lead"
+    value: float = 0
+    owner: str = "Comercial"
+
+
+class KnowledgeArticle(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    title: str
+    category: str = "Procedimento"
+    status: str = "draft"
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class VaultCredential(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    name: str
+    username: str
+    secret_hint: str = "********"
+    access_level: str = "restricted"
+
+
+class AutomationRule(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    name: str
+    trigger: str
+    action: str
+    enabled: bool = True
