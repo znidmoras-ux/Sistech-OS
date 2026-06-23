@@ -72,3 +72,28 @@ class TelemetrySample(BaseModel):
     memory_percent: float = Field(ge=0, le=100)
     disk_free_percent: float = Field(ge=0, le=100)
     recorded_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class RemoteCommand(BaseModel):
+    tenant_id: UUID
+    asset_id: UUID
+    command: str
+
+
+class CommandResult(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    asset_id: UUID
+    command: str
+    status: str = "queued"
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class DashboardSummary(BaseModel):
+    tenants: int
+    assets_total: int
+    assets_online: int
+    assets_offline: int
+    tickets_open: int
+    tickets_critical: int
+    telemetry_samples: int
