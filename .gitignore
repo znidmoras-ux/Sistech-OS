@@ -1,0 +1,14 @@
+# Ambiente local
+.env
+local/*
+!local/.gitkeep
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs e temporarios
+*.log
+tmp/
+temp/
+
